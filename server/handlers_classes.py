@@ -117,11 +117,11 @@ def classes_details():
                         'Sub classes': sub_class
                 }
                 all_classes_detail.append(class_detail)
-                print(all_classes_detail)
             else:
                 print('La solicitud no fue exitosa. Codigo de estado:', response.status_code)
         except Exception as e:
             print('Ocurrio un error', e)    
 
-
-classes_details()
+if __name__ == '__main__':
+    classes_api()
+    classes_details()

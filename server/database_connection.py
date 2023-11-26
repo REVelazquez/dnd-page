@@ -1,13 +1,16 @@
 import psycopg2
 import psycopg2.extras;
 
-from api_handlers import classes_api
+from handlers_classes import classes_api
+from handlers_spells import spells_api
 
 from dotenv import load_dotenv
 import os
 
 classes= classes_api()
 values_to_insert =[(index +1, value) for index, value in enumerate(classes)]
+
+spells= spells_api()
 
 
 load_dotenv()
@@ -36,8 +39,17 @@ try:
             )'''
             cur.execute(create_script)
             
-            cur.executemany('INSERT INTO classes (id, name) VALUES(%s, %s)', values_to_insert)
-        
+            cur.execute('DROP TABLE IF EXISTS spells')
+            create_script= '''CREATE TABLE IF NOT EXISTS spells(
+            id      SERIAL PRIMARY KEY NOT NULL,
+            index   varchar(40) NOT NULL,
+            name    varchar(40) NOT NULL
+            )'''
+            cur.execute(create_script)
+            
+            for spell in spells:
+                cur.execute('INSERT INTO spells (index, name) VALUES (%s, %s)', (spell['index'], spell['Name']))
+
             conn.commit()
 
 except Exception as error:
