@@ -3,6 +3,7 @@ import psycopg2.extras;
 
 from handlers_classes import classes_api
 from handlers_spells import spells_api
+from handlers_proficiencies import proficiencies_api
 
 from dotenv import load_dotenv
 import os
@@ -11,6 +12,8 @@ classes= classes_api()
 values_to_insert =[(index +1, value) for index, value in enumerate(classes)]
 
 spells= spells_api()
+
+proficiencies= proficiencies_api()
 
 
 load_dotenv()
@@ -40,15 +43,26 @@ try:
             cur.execute(create_script)
             
             cur.execute('DROP TABLE IF EXISTS spells')
-            create_script= '''CREATE TABLE IF NOT EXISTS spells(
+            create_script2= '''CREATE TABLE IF NOT EXISTS spells(
             id      SERIAL PRIMARY KEY NOT NULL,
             index   varchar(40) NOT NULL,
             name    varchar(40) NOT NULL
             )'''
-            cur.execute(create_script)
+            cur.execute(create_script2)
             
             for spell in spells:
                 cur.execute('INSERT INTO spells (index, name) VALUES (%s, %s)', (spell['index'], spell['Name']))
+
+
+            cur.execute('DROP TABLE IF EXISTS proficiencies')
+            create_script3= '''CREATE TABLE IF NOT EXISTS proficiencies(
+            id      SERIAL PRIMARY KEY NOT NULL,
+            index   varcahr(40) NOT NULL,
+            name    varchar(40) NOT NULL
+            )'''
+            cur.execute(create_script3)
+            for proficience in proficiencies:
+                cur.execute('INSERT INTO proficiencies (index, name) VALUES (%s, %s)', (proficience['index'], proficience['Name']))
 
             conn.commit()
 

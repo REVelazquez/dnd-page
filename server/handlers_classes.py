@@ -72,9 +72,9 @@ def classes_details():
                                 for option in starting_equipment_option['from']['options']:
                                     if 'of' in option and 'name' in option['of']:
                                         temp_choices.append(option['of']['name'])
-                                    elif 'choice' in option:
+                                    if 'choice' in option:
                                         temp_choices.append(option['choice']['from']['equipment_category']['name'])
-                                    elif 'items' in option:
+                                    if 'items' in option:
                                         for item in option['items']:
                                             if 'of' in item and 'name' in item['of']:
                                                 temp_choices.append(item['of']['name'])
@@ -92,7 +92,7 @@ def classes_details():
                                         multi_class_temp.append(f"{ability_name} ({minimum_score})")
                                     else:
                                         multi_class_temp.append(ability_name)
-                        elif 'proficiencies' in multi_class:
+                        if 'proficiencies' in multi_class:
                             proficiencies = []
                             for item in data['multi_classing']['proficiencies']:
                                 proficiencies.append(item['name'])
@@ -121,6 +121,7 @@ def classes_details():
                 print('La solicitud no fue exitosa. Codigo de estado:', response.status_code)
         except Exception as e:
             print('Ocurrio un error', e)    
+        print(all_classes_detail)
 
 if __name__ == '__main__':
     classes_api()
