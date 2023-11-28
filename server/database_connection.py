@@ -4,16 +4,16 @@ import psycopg2.extras;
 from handlers_classes import classes_api
 from handlers_spells import spells_api
 from handlers_proficiencies import proficiencies_api
+from handlers_ability_scores import ability_scores_api
 
 from dotenv import load_dotenv
 import os
 
 classes= classes_api()
 values_to_insert =[(index +1, value) for index, value in enumerate(classes)]
-
 spells= spells_api()
-
 proficiencies= proficiencies_api()
+ability_scores= ability_scores_api()
 
 
 load_dotenv()
@@ -37,16 +37,16 @@ try:
         with conn.cursor(cursor_factory= psycopg2.extras.DictCursor) as cur:
             cur.execute('DROP TABLE IF EXISTS  classes')
             create_script= ''' CREATE TABLE IF NOT EXISTS classes(
-            id      int PRIMARY KEY,
-            name    varchar(40) NOT NULL
+                id      int PRIMARY KEY,
+                name    varchar(40) NOT NULL
             )'''
             cur.execute(create_script)
             
             cur.execute('DROP TABLE IF EXISTS spells')
             create_script2= '''CREATE TABLE IF NOT EXISTS spells(
-            id      SERIAL PRIMARY KEY NOT NULL,
-            index   varchar(40) NOT NULL,
-            name    varchar(40) NOT NULL
+                id      SERIAL PRIMARY KEY NOT NULL,
+                index   varchar(60) NOT NULL,
+                name    varchar(40) NOT NULL    
             )'''
             cur.execute(create_script2)
             
@@ -56,18 +56,29 @@ try:
 
             cur.execute('DROP TABLE IF EXISTS proficiencies')
             create_script3= '''CREATE TABLE IF NOT EXISTS proficiencies(
-            id      SERIAL PRIMARY KEY NOT NULL,
-            index   varcahr(40) NOT NULL,
-            name    varchar(40) NOT NULL
+                id      SERIAL PRIMARY KEY NOT NULL,
+                index   varchar(60) NOT NULL,
+                name    varchar(40) NOT NULL
             )'''
             cur.execute(create_script3)
             for proficience in proficiencies:
                 cur.execute('INSERT INTO proficiencies (index, name) VALUES (%s, %s)', (proficience['index'], proficience['Name']))
-
+            
+            cur.execute('DROP TABLE IF EXISTS ability_scores')
+            create_script4='''CREATE TABLE IF NOT EXISTS ability_scores(
+                id      SERIAL PRIMARY KEY NOT NULL,
+                index   varchar(60) NOT NULL,
+                name    varchar(40) NOT NULL
+            )'''
+            cur.execute(create_script4)
+            for score in ability_scores:
+                cur.execute('INSERT INTO ability_scores(index, name) VALUES(%s, %s)', (score['index'], score['Name']))
+            
+            
             conn.commit()
-
+        print('Done')
 except Exception as error:
-    print(error)
+    print('An error happened: ',error)
 
 finally:
     if conn is not None:

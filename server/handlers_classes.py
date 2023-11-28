@@ -121,7 +121,8 @@ def classes_details():
                 print('La solicitud no fue exitosa. Codigo de estado:', response.status_code)
         except Exception as e:
             print('Ocurrio un error', e)    
-        print(all_classes_detail)
+        
+        return all_classes_detail
 
 if __name__ == '__main__':
     classes_api()

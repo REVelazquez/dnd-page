@@ -19,7 +19,7 @@ def spells_api():
                         spells.append({'index': item['index'], 'Name': item['name']})
             return spells
     except Exception as e:
-         print('Ocurrio un error', e)
+        print('An error happened ', e)
 
 def spells_details():
     spells= spells_api()
@@ -140,9 +140,9 @@ def spells_details():
                 'Subclasses:':subclasses
             }
             all_spells_details.append(spell_detail)
-        
         except Exception as e:
-             print('An error happened', e)    
+            print('An error happened', e) 
+        return all_spells_details   
 
 
 if __name__ == '__main__':
