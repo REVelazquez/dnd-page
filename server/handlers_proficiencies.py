@@ -15,7 +15,7 @@ def proficiencies_api():
                 if 'results' in datos:
                     resultados = datos ['results'] 
                     for item in resultados:
-                        proficiencies.append({'index': item['index'], 'Name': item['name']})
+                        proficiencies.append({'index': item['index'], 'name': item['name']})
             return proficiencies
     except Exception as e:
          print('Ocurrio un error', e)
@@ -46,10 +46,10 @@ def proficiencies_details():
                     for item in data['races']:
                         races.append(item['name'])
                 proficiencies_details_temp={
-                    'Name:': name,
-                    'Type:': type,
-                    'Classes:': classes,
-                    'Races:': races
+                    'Name': name,
+                    'Type': type,
+                    'Classes': classes,
+                    'Races': races
                 }
             all_proficiencies_details.append(proficiencies_details_temp)
             print(all_proficiencies_details)

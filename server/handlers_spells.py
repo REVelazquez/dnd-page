@@ -16,7 +16,7 @@ def spells_api():
                 if 'results' in datos:
                     resultados = datos ['results'] 
                     for item in resultados:
-                        spells.append({'index': item['index'], 'Name': item['name']})
+                        spells.append({'index': item['index'], 'name': item['name']})
             return spells
     except Exception as e:
         print('An error happened ', e)
@@ -47,6 +47,8 @@ def spells_details():
                     school=None
                     classes=[]
                     subclasses=[]
+                    heal=[]
+                    aoe={}
 
                     if 'desc' in data:
                         description=str(data['desc'])
@@ -96,13 +98,24 @@ def spells_details():
                             damage_per_slot= {}
                             for slot_level, damage_value in data['damage']['damage_at_slot_level'].items():
                                 damage_per_slot[slot_level]= damage_value
-                            damage.append({'Damage per level':damage_per_slot})
+                            damage.append({'Damage per level slot':damage_per_slot})
                         
                         if 'damage_at_character_level' in data['damage']:
                             damage_per_level={}
                             for level, damage_value in data['damage']['damage_at_character_level'].items():
                                 damage_per_level[level] = damage_value
-                            damage.append({'Damage per char level:': damage_per_slot})
+                            damage.append({'Damage per level:': damage_per_slot})
+
+                    if "heal_at_slot_level" in data:
+                        heal_per_slot = {}
+                        for slot_level, heal_value in data['heal_at_slot_level'].items():
+                            heal_per_slot[slot_level] = heal_value
+                        heal.append({'Heal per level slot': heal_per_slot})
+
+                    if 'area_of_effect' in data:
+                        aoe['type']=data['type']
+                        aoe['size']=data['size']
+
 
                     if 'school' in data:
                         school= data['school']['name']
@@ -120,30 +133,39 @@ def spells_details():
                         for item in data['subclasses']:
                             subclasses.append(item['name'])
 
-            spell_detail={
-                'Name': name,
-                'Description:': desc,
-                'Higher level:': higher_level,
-                'Range:':range,
-                'Components:':components,
-                'Materials:': materials,
-                'Ritual:': ritual,
-                'Duration:': duration,
-                'Concentration':concentration,
-                'Casting Time': casting_time,
-                'Level': level,
-                'Attack type:': attack_type,
-                'Damage:': damage,
-                'School:': school,
-                'Dc:': dc,
-                'Classes:':classes,
-                'Subclasses:':subclasses
-            }
+                    spell_detail={
+                        'Name': name,
+                        'Description': desc,
+                        'Higher level': higher_level,
+                        'Range':range,
+                        'Components':components,
+                        'Materials': materials,
+                        'Ritual': ritual,
+                        'Duration': duration,
+                        'Concentration':concentration,
+                        'Casting Time': casting_time,
+                        'Level': level,
+                        'Attack type': attack_type,
+                        'Classes':classes,
+                        'Subclasses':subclasses
+                    }
+                    if damage:
+                        spell_detail['Damage'] = damage
+                    if heal:
+                        spell_detail['Heal']= heal
+                    if aoe:
+                        spell_detail['Area of effect']=aoe
+                    if school:
+                        spell_detail['School'] = school
+                    if dc:
+                        spell_detail['Dc'] = dc
+
+                    
             all_spells_details.append(spell_detail)
+            
         except Exception as e:
             print('An error happened', e) 
-        return all_spells_details   
-
+    return all_spells_details   
 
 if __name__ == '__main__':
     spells_api()

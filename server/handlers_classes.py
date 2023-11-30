@@ -10,24 +10,24 @@ url_general= os.getenv('GENERAL_URL')
 def classes_api():
     url= url_general +'classes'
     response = requests.get(url)
+    classes=[]
     try:    
         if response.status_code == 200:
             datos= response.json()
             if 'results' in datos:
-                resultados=datos['results']
-                nombres=[resultado['name'] for resultado in resultados]
-            return nombres
-        else:
-            print('La solicitud no fue exitosa. Codigo de estado:', response.status_code)
+                for item in datos['results']:
+                    classes.append({'index':item['index'], 'name':item['name']})
     except Exception as e:
         print('Ocurrio un error', e)
+    return classes
+
 
 def classes_details():
     classes= classes_api()
     all_classes_detail = []
 
     for profession in classes:
-        url= url_general+'classes/'+profession.lower()
+        url= url_general+'classes/'+profession['index']
 
         response = requests.get(url)
         try:
@@ -105,7 +105,7 @@ def classes_details():
 
 
                 class_detail={
-                        'Profession': profession_name,
+                        'Name': profession_name,
                         'Hit-points':data['hit_die'],
                         'Proficiency choices': f"You have {choose_value}  to choose",
                         'Choices': proficiency_names,
@@ -122,7 +122,7 @@ def classes_details():
         except Exception as e:
             print('Ocurrio un error', e)    
         
-        return all_classes_detail
+    return all_classes_detail
 
 if __name__ == '__main__':
     classes_api()
