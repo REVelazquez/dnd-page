@@ -21,7 +21,6 @@ def classes_api():
         print('Ocurrio un error', e)
     return classes
 
-
 def classes_details():
     classes= classes_api()
     all_classes_detail = []
@@ -41,7 +40,6 @@ def classes_details():
                 item_choices= []
                 multi_classes=[]
                 sub_class=''
-
 
                 if 'proficiency_choices' in data:
                     for proficiency_choice in data['proficiency_choices']:

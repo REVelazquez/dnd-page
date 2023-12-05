@@ -45,7 +45,6 @@ def alignments_details():
 
         except Exception as error:
             print('An error happened', error)
-    print(alignment_detail)
     return alignment_detail
 
 if __name__ == '__main__':

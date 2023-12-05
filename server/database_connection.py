@@ -1,11 +1,8 @@
 import psycopg2
 import psycopg2.extras;
 
-from handlers_classes import classes_api
-from handlers_spells import spells_api
-from handlers_proficiencies import proficiencies_api
-from handlers_ability_scores import ability_scores_api
-from handlers_skills import skills_api
+from handlers.handlers_index import classes_api, spells_api, proficiencies_api, ability_scores_api, skills_api, alignments_api, conditions_api
+
 
 from dotenv import load_dotenv
 import os
@@ -15,6 +12,9 @@ spells= spells_api()
 proficiencies= proficiencies_api()
 ability_scores= ability_scores_api()
 skills=skills_api()
+alignments=alignments_api()
+conditions= conditions_api()
+
 
 load_dotenv()
 
@@ -85,6 +85,26 @@ try:
             cur.execute(create_script5)
             for skill in skills:
                 cur.execute('INSERT INTO skills(index, name) VALUES(%s, %s)', (skill['index'], skill['name']))
+
+            cur.execute('DROP TABLE IF EXISTS alignments')
+            create_script6='''CREATE TABLE IF NOT EXISTS alignments(
+            id      SERIAL PRIMARY KEY NOT NULL,
+            index   varchar(40) NOT NULL,
+            name    varchar(40) NOT NULL
+            )'''
+            cur.execute(create_script6)
+            for alignment in alignments:
+                cur.execute('INSERT INTO alignments(index, name) VALUES(%s, %s)', (alignment['index'], alignment['name']))
+            
+            cur.execute('DROP TABLE IF EXISTS conditions')
+            create_script7= '''CREATE TABLE IF NOT EXIST conditions(
+            id      SERIAL PRIMARY KEY NOT NULL,
+            index   varchar(40) NOT NULL,
+            name   varchar(40) NOT NULL,
+            )'''
+            cur.execute(create_script7)
+            for condition in conditions:
+                cur.execute('INSERT INTO conditions(index, name) VALUES(%s, %s)', (condition['index'], condition['name']))
 
             conn.commit()
         print('Done')
