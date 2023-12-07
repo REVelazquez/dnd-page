@@ -3,15 +3,18 @@ import psycopg2.extras;
 from dotenv import load_dotenv
 import os
 
-from handlers.handlers_ability_scores import ability_scores_api
-from handlers.handlers_alignments import alignments_api
-from handlers.handlers_background import backgrounds_api
-from handlers.handlers_damage_types import damage_types_api
-from handlers.handlers_classes import classes_api
-from handlers.handlers_conditions import conditions_api
-from handlers.handlers_skills import skills_api
-from handlers.handlers_proficiencies import proficiencies_api
-from handlers.handlers_spells import spells_api
+
+from handlers import (
+    classes_api,
+    spells_api,
+    proficiencies_api,
+    ability_scores_api,
+    skills_api,
+    alignments_api,
+    conditions_api,
+    backgrounds_api,
+    damage_types_api
+)
 
 classes= classes_api()
 spells= spells_api()
