@@ -10,18 +10,19 @@ def conditions_api():
     response = requests.get(url)
     try:
         conditions=[]
-        datos=response.json()
-        if 'results' in datos:
-            resultados=datos['results']
-            for item in resultados:
-                conditions.append({'index':item['index'], 'name':item['name']})
+        if response.status_code == 200:
+            datos=response.json()
+            if 'results' in datos:
+                resultados=datos['results']
+                for item in resultados:
+                    conditions.append({'index':item['index'], 'name':item['name']})
         return conditions
     except Exception as e:
         print('An error happened', e)
 
 def conditions_details():
     conditions=conditions_api()
-    conditions_details= []
+    all_conditions_details= []
     for condition in conditions:
         url=url_general+'conditions/'+condition['index']
         try:
@@ -38,7 +39,7 @@ def conditions_details():
                 if 'desc' in data:
                     desc= data['desc']
                     temporal_detail['desc']=desc
-            conditions_details.append(temporal_detail)
+            all_conditions_details.append(temporal_detail)
         except Exception as error:
             print('An error happened', error)
     return conditions_details

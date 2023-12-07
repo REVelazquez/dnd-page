@@ -1,11 +1,17 @@
 import psycopg2
 import psycopg2.extras;
-
-from handlers.handlers_index import classes_api, spells_api, proficiencies_api, ability_scores_api, skills_api, alignments_api, conditions_api
-
-
 from dotenv import load_dotenv
 import os
+
+from handlers.handlers_ability_scores import ability_scores_api
+from handlers.handlers_alignments import alignments_api
+from handlers.handlers_background import backgrounds_api
+from handlers.handlers_damage_types import damage_types_api
+from handlers.handlers_classes import classes_api
+from handlers.handlers_conditions import conditions_api
+from handlers.handlers_skills import skills_api
+from handlers.handlers_proficiencies import proficiencies_api
+from handlers.handlers_spells import spells_api
 
 classes= classes_api()
 spells= spells_api()
@@ -14,6 +20,8 @@ ability_scores= ability_scores_api()
 skills=skills_api()
 alignments=alignments_api()
 conditions= conditions_api()
+backgrounds= backgrounds_api()
+damage_types= damage_types_api()
 
 
 load_dotenv()
@@ -36,75 +44,97 @@ try:
     ) as conn:
         with conn.cursor(cursor_factory= psycopg2.extras.DictCursor) as cur:
             cur.execute('DROP TABLE IF EXISTS  classes')
-            create_script= ''' CREATE TABLE IF NOT EXISTS classes(
+            create_script_class= ''' CREATE TABLE IF NOT EXISTS classes(
                 id      SERIAL PRIMARY KEY NOT NULL,
                 index   varchar(40) NOT NULL,
                 name    varchar(40) NOT NULL
             )'''
-            cur.execute(create_script)
+            cur.execute(create_script_class)
             for class_type in classes:
                 cur.execute('INSERT INTO classes (index, name) VALUES(%s, %s)', (class_type['index'],class_type['name']))
-            
+
             cur.execute('DROP TABLE IF EXISTS spells')
-            create_script2= '''CREATE TABLE IF NOT EXISTS spells(
+            create_script_spells= '''CREATE TABLE IF NOT EXISTS spells(
                 id      SERIAL PRIMARY KEY NOT NULL,
                 index   varchar(60) NOT NULL,
                 name    varchar(40) NOT NULL    
             )'''
-            cur.execute(create_script2)
+            cur.execute(create_script_spells)
+
             for spell in spells:
                 cur.execute('INSERT INTO spells (index, name) VALUES (%s, %s)', (spell['index'], spell['name']))
-
-
+           
             cur.execute('DROP TABLE IF EXISTS proficiencies')
-            create_script3= '''CREATE TABLE IF NOT EXISTS proficiencies(
+            create_script_proficiencies= '''CREATE TABLE IF NOT EXISTS proficiencies(
                 id      SERIAL PRIMARY KEY NOT NULL,
                 index   varchar(60) NOT NULL,
                 name    varchar(40) NOT NULL
             )'''
-            cur.execute(create_script3)
+            cur.execute(create_script_proficiencies)
             for proficience in proficiencies:
                 cur.execute('INSERT INTO proficiencies (index, name) VALUES (%s, %s)', (proficience['index'], proficience['name']))
-            
+
             cur.execute('DROP TABLE IF EXISTS ability_scores')
-            create_script4='''CREATE TABLE IF NOT EXISTS ability_scores(
+            create_script_ability_scores='''CREATE TABLE IF NOT EXISTS ability_scores(
                 id      SERIAL PRIMARY KEY NOT NULL,
                 index   varchar(60) NOT NULL,
                 name    varchar(40) NOT NULL
             )'''
-            cur.execute(create_script4)
+            cur.execute(create_script_ability_scores)
             for score in ability_scores:
                 cur.execute('INSERT INTO ability_scores(index, name) VALUES(%s, %s)', (score['index'], score['name']))
 
             cur.execute('DROP TABLE IF EXISTS skills')
-            create_script5='''CREATE TABLE IF NOT EXISTS skills(
+            create_script_skills='''CREATE TABLE IF NOT EXISTS skills(
             id      SERIAL PRIMARY KEY NOT NULL,
             index   varchar(60) NOT NULL,
             name    varchar(40) NOT NULL
             )'''
-            cur.execute(create_script5)
+            cur.execute(create_script_skills)
             for skill in skills:
                 cur.execute('INSERT INTO skills(index, name) VALUES(%s, %s)', (skill['index'], skill['name']))
 
             cur.execute('DROP TABLE IF EXISTS alignments')
-            create_script6='''CREATE TABLE IF NOT EXISTS alignments(
+            create_script_alignments='''CREATE TABLE IF NOT EXISTS alignments(
             id      SERIAL PRIMARY KEY NOT NULL,
             index   varchar(40) NOT NULL,
             name    varchar(40) NOT NULL
             )'''
-            cur.execute(create_script6)
+            cur.execute(create_script_alignments)
+
             for alignment in alignments:
                 cur.execute('INSERT INTO alignments(index, name) VALUES(%s, %s)', (alignment['index'], alignment['name']))
             
             cur.execute('DROP TABLE IF EXISTS conditions')
-            create_script7= '''CREATE TABLE IF NOT EXIST conditions(
+            create_script_conditions= '''CREATE TABLE IF NOT EXISTS conditions(
             id      SERIAL PRIMARY KEY NOT NULL,
             index   varchar(40) NOT NULL,
-            name   varchar(40) NOT NULL,
+            name   varchar(40) NOT NULL
             )'''
-            cur.execute(create_script7)
+            cur.execute(create_script_conditions)
             for condition in conditions:
                 cur.execute('INSERT INTO conditions(index, name) VALUES(%s, %s)', (condition['index'], condition['name']))
+
+            cur.execute('DROP TABLE IF EXISTS background')
+            create_script_background='''CREATE TABLE IF NOT EXISTS background(
+            id      SERIAL PRIMARY KEY NOT NULL,
+            index   varchar(40) NOT NULL,
+            name    varchar(40) NOT NULL
+            )'''
+            cur.execute(create_script_background)
+            for background in backgrounds:
+                cur.execute('INSERT INTO background(index, name) VALUES(%s, %s)', (background['index'], background['name']))
+
+            cur.execute('DROP TABLE IF EXISTS damage_types')
+            create_script_damage_types=''' CREATE TABLE IF NOT EXISTS damage_types(
+            id      SERIAL PRIMARY KEY NOT NULL,
+            index   varchar(40) NOT NULL,
+            name    varchar(40) NOT NULL,
+            description    varchar(300) NOT NULL
+            )'''
+            cur.execute(create_script_damage_types)
+            for damage_type in damage_types:
+                cur.execute('INSERT INTO damage_types(index, name, description) VALUES(%s, %s, %s)', (damage_type['index'], damage_type['name'], damage_type['desc']))
 
             conn.commit()
         print('Done')
