@@ -13,7 +13,8 @@ from handlers import (
     alignments_api,
     conditions_api,
     backgrounds_api,
-    damage_types_api
+    damage_types_api,
+    equipment_categories_api
 )
 
 classes= classes_api()
@@ -25,6 +26,7 @@ alignments=alignments_api()
 conditions= conditions_api()
 backgrounds= backgrounds_api()
 damage_types= damage_types_api()
+equipment_categories=equipment_categories_api()
 
 
 load_dotenv()
@@ -138,6 +140,16 @@ try:
             cur.execute(create_script_damage_types)
             for damage_type in damage_types:
                 cur.execute('INSERT INTO damage_types(index, name, description) VALUES(%s, %s, %s)', (damage_type['index'], damage_type['name'], damage_type['desc']))
+
+            cur.execute('DROP TABLE IF EXISTS equipment_categories')
+            create_script_equipment_categories=''' CREATE TABLE IF NOT EXISTS equipment_categories(
+            id      SERIAL PRIMARY KEY NOT NULL,
+            index   varchar(40) NOT NULL,
+            name    varchar(40) NOT NULL
+            )'''
+            cur.execute(create_script_equipment_categories)
+            for equipment_category in equipment_categories:
+                cur.execute('INSERT INTO equipment_categories(index, name) VALUES(%s, %s)', (equipment_category['index'], equipment_category['name']))
 
             conn.commit()
         print('Done')

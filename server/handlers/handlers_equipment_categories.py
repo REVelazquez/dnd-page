@@ -45,7 +45,7 @@ def equipments_in_categories():
         except Exception as error:
             print('An error happened', error)
         
-    print(all_equipments_in_categories)
+    return(all_equipments_in_categories)
 
 if __name__ == '__main__':
     equipments_in_categories()
