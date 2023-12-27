@@ -16,6 +16,7 @@ from handlers import (
     feats_api,
     features_api,
     proficiencies_api,
+    languages_api,
     skills_api,
     spells_api,
 )
@@ -30,6 +31,7 @@ equipment_categories=equipment_categories_api()
 equipments=equipment_api()
 feats=feats_api()
 features=features_api()
+languages=languages_api()
 proficiencies= proficiencies_api()
 skills=skills_api()
 spells= spells_api()
@@ -186,7 +188,15 @@ try:
             for feature in features:
                 cur.execute('INSERT INTO features(index, name) VALUES(%s, %s)', (feature['index'], feature['name']))
 
-
+            cur.execute('DROP TABLE IF EXISTS languages')
+            create_script_languages= '''CREATE TABLE IF NOT EXISTS languages(
+            id      SERIAL PRIMARY KEY NOT NULL,
+            index   varchar(40) NOT NULL,
+            name    varchar(40) NOT NULL    
+            )'''
+            cur.execute(create_script_languages)
+            for language in languages:
+                cur.execute('INSERT INTO languages(index, name) VALUES(%s, %s)', (language['index'], language['name']))
             
             conn.commit()
         print('Done')

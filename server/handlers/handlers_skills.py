@@ -7,9 +7,9 @@ load_dotenv()
 url_general= os.getenv('GENERAL_URL')
 
 def skills_api():
-    url = url_general + 'skills'
-    response = requests.get(url)
     try:
+        url = url_general + 'skills'
+        response = requests.get(url)
         skills=[]
         datos=response.json()
         if 'results' in datos:

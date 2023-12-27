@@ -6,9 +6,9 @@ load_dotenv()
 url_general= os.getenv('GENERAL_URL')
 
 def damage_types_api():
-    url = url_general + 'damage-types/'
-    response = requests.get(url)
     try:
+        url = url_general + 'damage-types/'
+        response = requests.get(url)
         damage_types=[]
         datos=response.json()
         if response.status_code == 200:

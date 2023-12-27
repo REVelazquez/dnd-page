@@ -6,9 +6,9 @@ load_dotenv()
 url_general= os.getenv('GENERAL_URL')
 
 def backgrounds_api():
-    url = url_general + 'backgrounds'
-    response = requests.get(url)
     try:
+        url = url_general + 'backgrounds'
+        response = requests.get(url)
         backgrounds=[]
         datos=response.json()
         if 'results' in datos:

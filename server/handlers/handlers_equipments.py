@@ -6,17 +6,17 @@ import os
 load_dotenv()
 url_general= os.getenv('GENERAL_URL')
 def equipment_api():
-    url = url_general + 'equipment'
-    response = requests.get(url)
     try:
-            equipments=[]
-            if response.status_code == 200:
-                datos = response.json()
-                if 'results' in datos:
-                    resultados = datos ['results'] 
-                    for item in resultados:
-                        equipments.append({'index': item['index'], 'name': item['name']})
-            return equipments
+        url = url_general + 'equipment'
+        response = requests.get(url)
+        equipments=[]
+        if response.status_code == 200:
+            datos = response.json()
+            if 'results' in datos:
+                resultados = datos ['results'] 
+                for item in resultados:
+                    equipments.append({'index': item['index'], 'name': item['name']})
+        return equipments
     except Exception as e:
          print('Ocurrio un error', e)
 

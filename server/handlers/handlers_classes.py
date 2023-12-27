@@ -8,17 +8,17 @@ load_dotenv()
 url_general= os.getenv('GENERAL_URL')
 
 def classes_api():
-    url= url_general +'classes'
-    response = requests.get(url)
-    classes=[]
     try:    
+        url= url_general +'classes'
+        response = requests.get(url)
+        classes=[]
         if response.status_code == 200:
             datos= response.json()
             if 'results' in datos:
                 for item in datos['results']:
                     classes.append({'index':item['index'], 'name':item['name']})
-    except Exception as e:
-        print('Ocurrio un error', e)
+    except Exception as error:
+        print('Ocurrio un error', error)
     return classes
 
 def classes_details():
@@ -122,6 +122,69 @@ def classes_details():
         
     return all_classes_detail
 
+def class_levels ():
+    try:
+        classes = classes_api()
+        all_class_levels={}
+        for unique_class in classes:
+            url=url_general+'classes/'+unique_class['index']+ '/levels'
+            response= requests.get(url)
+            if response.status_code== 200:
+                data= response.json()
+                levels=[]
+                for item in data:
+                    temp_level={}
+                    if 'level' in item:
+                        temp_level['level']=item['level']
+                    if 'ability_score_bonuses' in item:
+                        temp_level['ability_score_bonuses']= item['ability_score_bonuses']
+                    if 'prof_bonus' in item:
+                        temp_level['prof_bonus']= item['prof_bonus']
+                    if 'features' in item:
+                        features=[]
+                        for feature in item['features']:
+                            if 'name' in feature:
+                                features.append(feature['name'])
+                        temp_level['features']= features
+                    if 'spellcasting' in item:
+                        spellcasting={}
+                        if 'cantrips_known' in item['spellcasting']:
+                            spellcasting['cantrips_known']= item['spellcasting']['cantrips_known']
+                        if 'spell_slots_level_1' in item['spellcasting']:
+                            spellcasting['spell_slots_level_1']=item['spellcasting']['spell_slots_level_1']
+                        if 'spell_slots_level_2' in item['spellcasting']:
+                            spellcasting['spell_slots_level_2']=item['spellcasting']['spell_slots_level_2']
+                        if 'spell_slots_level_3' in item['spellcasting']:
+                            spellcasting['spell_slots_level_3']=item['spellcasting']['spell_slots_level_3']
+                        if 'spell_slots_level_4' in item['spellcasting']:
+                            spellcasting['spell_slots_level_4']=item['spellcasting']['spell_slots_level_4']
+                        if 'spell_slots_level_5' in item['spellcasting']:
+                            spellcasting['spell_slots_level_5']=item['spellcasting']['spell_slots_level_5']
+                        if 'spell_slots_level_6' in item['spellcasting']:
+                            spellcasting['spell_slots_level_6']=item['spellcasting']['spell_slots_level_6']
+                        if 'spell_slots_level_7' in item['spellcasting']:
+                            spellcasting['spell_slots_level_7']=item['spellcasting']['spell_slots_level_7']
+                        if 'spell_slots_level_8' in item['spellcasting']:
+                            spellcasting['spell_slots_level_8']=item['spellcasting']['spell_slots_level_8']
+                        if 'spell_slots_level_9' in item['spellcasting']:
+                            spellcasting['spell_slots_level_9']=item['spellcasting']['spell_slots_level_9']
+
+                        temp_level['spellcasting']= spellcasting
+                    if 'class_specific' in item:
+                        temp_level['class_specific']= item['class_specific']
+                    if 'index' in item:
+                        temp_level['index']= item['index']
+                    if 'class' in item:
+                        temp_level['class']= item['class']['name']
+                    levels.append(temp_level)
+                all_class_levels[unique_class['index']]=levels
+                print(all_class_levels)
+            
+
+    except Exception as error:
+        print('An error happened', error)
+
 if __name__ == '__main__':
     classes_api()
     classes_details()
+    class_levels()

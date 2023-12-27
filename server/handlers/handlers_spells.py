@@ -7,17 +7,17 @@ load_dotenv()
 url_general= os.getenv('GENERAL_URL')
 
 def spells_api():
-    url = url_general + 'spells/'
-    response = requests.get(url)
     try:
-            spells=[]
-            if response.status_code == 200:
-                datos = response.json()
-                if 'results' in datos:
-                    resultados = datos ['results'] 
-                    for item in resultados:
-                        spells.append({'index': item['index'], 'name': item['name']})
-            return spells
+        url = url_general + 'spells/'
+        response = requests.get(url)
+        spells=[]
+        if response.status_code == 200:
+            datos = response.json()
+            if 'results' in datos:
+                resultados = datos ['results'] 
+                for item in resultados:
+                    spells.append({'index': item['index'], 'name': item['name']})
+        return spells
     except Exception as e:
         print('An error happened ', e)
 
