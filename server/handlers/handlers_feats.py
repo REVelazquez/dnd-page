@@ -24,7 +24,7 @@ def feats_details ():
     feats= feats_api()
     feat_details=[]
     for feat in feats:
-        url= url_general +'feats/' +feat['name']
+        url= url_general +'feats/' +feat['index']
         response=requests.get(url)
         try:
             if response.status_code == 200:
@@ -35,13 +35,24 @@ def feats_details ():
                 if 'prerequisites' in data:
                     prerequisites={}
                     for item in data['prerequisites']:
-                        if 'name' in item:
-                            prerequisites[item]
-                            prerequisites[item]['name']=item['name']
+                        if 'ability_score' in item:
+                            prerequisites['name']=item['ability_score']['name']
+                        if 'minimum_score' in item:
+                            prerequisites['min_score']= item['minimum_score']
+                    detail['prerequisites']= prerequisites
 
+                if 'desc' in data:
+                    description= []
+                    for item in data['desc']:
+                        description.append(item)
+                    detail['description']=description
+                feat_details.append(detail)
+            return feat_details
 
         except Exception as error:
             print('An error happened ', error)
 
+
 if __name__ == '__main__':
     feats_api()
+    feats_details()

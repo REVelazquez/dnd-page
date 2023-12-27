@@ -5,30 +5,34 @@ import os
 
 
 from handlers import (
-    classes_api,
-    spells_api,
-    proficiencies_api,
     ability_scores_api,
-    skills_api,
     alignments_api,
-    conditions_api,
     backgrounds_api,
+    classes_api,
+    conditions_api,
     damage_types_api,
     equipment_categories_api,
-    equipment_api
+    equipment_api,
+    feats_api,
+    features_api,
+    proficiencies_api,
+    skills_api,
+    spells_api,
 )
 
-classes= classes_api()
-spells= spells_api()
-proficiencies= proficiencies_api()
 ability_scores= ability_scores_api()
-skills=skills_api()
 alignments=alignments_api()
-conditions= conditions_api()
 backgrounds= backgrounds_api()
+classes= classes_api()
+conditions= conditions_api()
 damage_types= damage_types_api()
 equipment_categories=equipment_categories_api()
 equipments=equipment_api()
+feats=feats_api()
+features=features_api()
+proficiencies= proficiencies_api()
+skills=skills_api()
+spells= spells_api()
 
 load_dotenv()
 
@@ -162,7 +166,28 @@ try:
             for equipment in equipments:
                 cur.execute('INSERT INTO equipment(index, name) VALUES(%s, %s)', (equipment['index'], equipment['name']))
 
+            cur.execute('DROP TABLE IF EXISTS feats')
+            create_script_feats= ''' CREATE TABLE IF NOT EXISTS feats(
+            id      SERIAL PRIMARY KEY NOT NULL,
+            index   varchar(40) NOT NULL,
+            name    varchar(40) NOT NULL
+            )'''
+            cur.execute(create_script_feats)
+            for feat in feats:
+                cur.execute('INSERT INTO feats(index, name) VALUES(%s, %s)', (feat['index'], feat['name']))
+            
+            cur.execute('DROP TABLE IF EXISTS features')
+            create_script_features='''CREATE TABLE IF NOT EXISTS features(
+            id      SERIAL PRIMARY KEY NOT NULL,
+            index   varchar(60) NOT NULL,
+            name    varchar(60) NOT NULL
+            )'''
+            cur.execute(create_script_features)
+            for feature in features:
+                cur.execute('INSERT INTO features(index, name) VALUES(%s, %s)', (feature['index'], feature['name']))
 
+
+            
             conn.commit()
         print('Done')
 except Exception as error:
