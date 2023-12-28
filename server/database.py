@@ -17,6 +17,7 @@ from handlers import (
     features_api,
     languages_api,
     magic_items_api,
+    magic_schools_api,
     proficiencies_api,
     skills_api,
     spells_api,
@@ -37,6 +38,7 @@ proficiencies= proficiencies_api()
 skills=skills_api()
 spells= spells_api()
 magic_items=magic_items_api()
+magic_schools=magic_schools_api()
 
 load_dotenv()
 
@@ -209,6 +211,17 @@ try:
             cur.execute(create_script_magic_items)
             for magic_item in magic_items:
                 cur.execute('INSERT INTO magic_items(index, name) VALUES(%s, %s)', (magic_item['index'], magic_item['name']))
+            
+            cur.execute('DROP TABLE IF EXISTS magic_schools')
+            create_script_magic_schools='''CREATE TABLE IF NOT EXISTS magic_schools(
+            id             SERIAL PRIMARY KEY NOT NULL,
+            index          varchar(60) NOT NULL,
+            name           varchar(60) NOT NULL,
+            description    varchar(400) NOT NULL
+            )'''
+            cur.execute(create_script_magic_schools)
+            for magic_school in magic_schools:
+                cur.execute('INSERT INTO magic_schools(index, name, description) VALUES(%s, %s, %s)', (magic_school['index'], magic_school['name'], magic_school['desc']))
 
             conn.commit()
         print('Done')
