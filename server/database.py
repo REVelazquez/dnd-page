@@ -15,8 +15,9 @@ from handlers import (
     equipment_api,
     feats_api,
     features_api,
-    proficiencies_api,
     languages_api,
+    magic_items_api,
+    proficiencies_api,
     skills_api,
     spells_api,
 )
@@ -35,6 +36,7 @@ languages=languages_api()
 proficiencies= proficiencies_api()
 skills=skills_api()
 spells= spells_api()
+magic_items=magic_items_api()
 
 load_dotenv()
 
@@ -198,6 +200,16 @@ try:
             for language in languages:
                 cur.execute('INSERT INTO languages(index, name) VALUES(%s, %s)', (language['index'], language['name']))
             
+            cur.execute('DROP TABLE IF EXISTS magic_items')
+            create_script_magic_items=''' CREATE TABLE IF NOT EXISTS magic_items(
+            id      SERIAL PRIMARY KEY NOT NULL,
+            index   varchar(60) NOT NULL,
+            name    varchar(60) NOT NULL
+            )'''
+            cur.execute(create_script_magic_items)
+            for magic_item in magic_items:
+                cur.execute('INSERT INTO magic_items(index, name) VALUES(%s, %s)', (magic_item['index'], magic_item['name']))
+
             conn.commit()
         print('Done')
 except Exception as error:

@@ -7,6 +7,7 @@ from .handlers_damage_types import damage_types_api
 from .handlers_feats import feats_api
 from .handlers_features import features_api
 from .handlers_languages import languages_api
+from .handlers_magic_items import magic_items_api
 from .handlers_proficiencies import proficiencies_api
 from .handlers_skills import skills_api
 from .handlers_spells import spells_api
