@@ -18,7 +18,9 @@ from handlers import (
     languages_api,
     magic_items_api,
     magic_schools_api,
+    monsters_api,
     proficiencies_api,
+    races_api,
     skills_api,
     spells_api,
 )
@@ -34,11 +36,13 @@ equipments=equipment_api()
 feats=feats_api()
 features=features_api()
 languages=languages_api()
-proficiencies= proficiencies_api()
-skills=skills_api()
-spells= spells_api()
 magic_items=magic_items_api()
 magic_schools=magic_schools_api()
+monsters=monsters_api()
+proficiencies= proficiencies_api()
+races=races_api()
+skills=skills_api()
+spells= spells_api()
 
 load_dotenv()
 
@@ -222,6 +226,26 @@ try:
             cur.execute(create_script_magic_schools)
             for magic_school in magic_schools:
                 cur.execute('INSERT INTO magic_schools(index, name, description) VALUES(%s, %s, %s)', (magic_school['index'], magic_school['name'], magic_school['desc']))
+
+            cur.execute('DROP TABLE IF EXISTS monsters')
+            create_script_monsters='''CREATE TABLE IF NOT EXISTS monsters(
+            id      SERIAL PRIMARY KEY NOT NULL,
+            index   varchar(60) NOT NULL,
+            name    varchar(60) NOT NULL
+            )'''
+            cur.execute(create_script_monsters)
+            for monster in monsters:
+                cur.execute('INSERT INTO monsters(index, name) VALUES(%s, %s)', (monster['index'], monster['name']))
+
+            cur.execute('DROP TABLE IF EXISTS races')
+            create_script_races='''CREATE TABLE IF NOT EXISTS races(
+            id      SERIAL PRIMARY KEY NOT NULL,
+            index   varchar(60) NOT NULL,
+            name    varchar(60) NOT NULL
+            )'''
+            cur.execute(create_script_races)
+            for race in races:
+                cur.execute('INSERT INTO races(index, name) VALUES(%s, %s)', (race['index'], race['name']))
 
             conn.commit()
         print('Done')

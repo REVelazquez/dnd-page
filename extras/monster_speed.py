@@ -11,4 +11,6 @@ def store_speed_data(speed_data, cursor):
             # Insertar los valores en la tabla
             cursor.execute('INSERT INTO SpeedData (mode, value) VALUES (?, ?)', (mode, value))
 
-# luego se llamaria esta funcion para la base de datos
+# luego se llamaria esta funcion para la base de datos ojo luego hay que hacerlo nuevamente
+# con quizas lenguages, special_abilities, senses,
+# todo lo relacionado a daños e inmunidades asi como accions tambien

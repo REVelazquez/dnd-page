@@ -6,9 +6,9 @@ load_dotenv()
 url_general= os.getenv('GENERAL_URL')
 
 def ability_scores_api():
-    url = url_general + 'ability-scores'
-    response = requests.get(url)
     try:
+        url = url_general + 'ability-scores'
+        response = requests.get(url)
         ability_scores=[]
         datos=response.json()
         if 'results' in datos:
