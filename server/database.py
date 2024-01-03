@@ -21,6 +21,7 @@ from handlers import (
     monsters_api,
     proficiencies_api,
     races_api,
+    rules_api,
     skills_api,
     spells_api,
 )
@@ -41,8 +42,10 @@ magic_schools=magic_schools_api()
 monsters=monsters_api()
 proficiencies= proficiencies_api()
 races=races_api()
+rules=rules_api()
 skills=skills_api()
 spells= spells_api()
+
 
 load_dotenv()
 
@@ -150,7 +153,7 @@ try:
             id      SERIAL PRIMARY KEY NOT NULL,
             index   varchar(40) NOT NULL,
             name    varchar(40) NOT NULL,
-            description    varchar(300) NOT NULL
+            description    text
             )'''
             cur.execute(create_script_damage_types)
             for damage_type in damage_types:
@@ -221,7 +224,7 @@ try:
             id             SERIAL PRIMARY KEY NOT NULL,
             index          varchar(60) NOT NULL,
             name           varchar(60) NOT NULL,
-            description    varchar(400) NOT NULL
+            description    text
             )'''
             cur.execute(create_script_magic_schools)
             for magic_school in magic_schools:
@@ -246,6 +249,19 @@ try:
             cur.execute(create_script_races)
             for race in races:
                 cur.execute('INSERT INTO races(index, name) VALUES(%s, %s)', (race['index'], race['name']))
+
+            cur.execute('DROP TABLE IF EXISTS rules')
+            create_script_rules='''CREATE TABLE IF NOT EXISTS rules(
+            id      SERIAL PRIMARY KEY NOT NULL,
+            index   varchar(60) NOT NULL,
+            name    varchar(60) NOT NULL,
+            description text,
+            subsections text[]
+            )'''
+            cur.execute(create_script_rules)
+            for rule in rules:
+                cur.execute('INSERT INTO rules(index, name, description, subsections) VALUES(%s, %s, %s, %s)',
+                    (rule['index'], rule['name'], rule.get('desc', ''), rule.get('subsections', [])))
 
             conn.commit()
         print('Done')
