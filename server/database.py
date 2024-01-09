@@ -22,6 +22,7 @@ from handlers import (
     proficiencies_api,
     races_api,
     rules_api,
+    rule_sections_api,
     skills_api,
     spells_api,
 )
@@ -43,6 +44,7 @@ monsters=monsters_api()
 proficiencies= proficiencies_api()
 races=races_api()
 rules=rules_api()
+rule_sections=rule_sections_api()
 skills=skills_api()
 spells= spells_api()
 
@@ -262,6 +264,18 @@ try:
             for rule in rules:
                 cur.execute('INSERT INTO rules(index, name, description, subsections) VALUES(%s, %s, %s, %s)',
                     (rule['index'], rule['name'], rule.get('desc', ''), rule.get('subsections', [])))
+
+            cur.execute('DROP TABLE IF EXISTS rule_sections')
+            create_script_rule_sections='''CREATE TABLE IF NOT EXISTS rule_sections(
+            id              SERIAL PRIMARY KEY NOT NULL,
+            index           varchar(60) NOT NULL,
+            name            varchar(60) NOT NULL,
+            description     text
+            )'''
+            cur.execute(create_script_rule_sections)
+            for rule_section in rule_sections:
+                cur.execute('INSERT INTO rule_sections(index, name, description) VALUES(%s, %s, %s)',
+                    (rule_section['index'], rule_section['name'], rule.get('desc', '')))
 
             conn.commit()
         print('Done')

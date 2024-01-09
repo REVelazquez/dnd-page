@@ -13,6 +13,7 @@ from .handlers_monsters import monsters_api
 from .handlers_proficiencies import proficiencies_api
 from .handlers_races import races_api
 from .handlers_rules import rules_api
+from .handlers_rules_sections import rule_sections_api
 from .handlers_skills import skills_api
 from .handlers_spells import spells_api
 from .handlers_equipment_categories import equipment_categories_api
